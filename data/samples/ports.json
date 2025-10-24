@@ -1,0 +1,57 @@
+[
+  {
+    "Port": "20",
+    "Service": "FTP (Data)",
+    "Protocol": "TCP"
+  },
+  {
+    "Port": "21",
+    "Service": "FTP (Control)",
+    "Protocol": "TCP"
+  },
+  {
+    "Port": "22",
+    "Service": "SSH",
+    "Protocol": "TCP"
+  },
+  {
+    "Port": "23",
+    "Service": "Telnet",
+    "Protocol": "TCP"
+  },
+  {
+    "Port": "25",
+    "Service": "SMTP",
+    "Protocol": "TCP"
+  },
+  {
+    "Port": "53",
+    "Service": "DNS",
+    "Protocol": "TCP/UDP"
+  },
+  {
+    "Port": "80",
+    "Service": "HTTP",
+    "Protocol": "TCP"
+  },
+  {
+    "Port": "110",
+    "Service": "POP3",
+    "Protocol": "TCP"
+  },
+  {
+    "Port": "143",
+    "Service": "IMAP",
+    "Protocol": "TCP"
+  },
+  {
+    "Port": "443",
+    "Service": "HTTPS",
+    "Protocol": "TCP"
+  },
+  {
+    "Port": "3389",
+    "Service": "RDP",
+    "Protocol": "TCP"
+  }
+]

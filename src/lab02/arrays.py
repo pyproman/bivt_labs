@@ -1,4 +1,4 @@
-from lib.test import run
+from ..lib.test import run
 
 def min_max(nums: list[float | int]) -> tuple[float | int, float | int]:
     '''
@@ -26,18 +26,18 @@ def flatten(mat: list[list | tuple]) -> list:
     return r
 
 if __name__ == '__main__':
-    run(min_max, [3, -1, 5, 5, 0], (-1, 5))
-    run(min_max, [42], (42, 42))
-    run(min_max, [-5, -2, -9], (-9, -2))
-    run(min_max, [], ValueError)
-    run(min_max, [1.5, 2, 2.0, -3.1], (-3.1, 2))
+    run(lambda:min_max([3, -1, 5, 5, 0]), result=(-1, 5))
+    run(lambda:min_max([42]), result=(42, 42))
+    run(lambda:min_max([-5, -2, -9]), result=(-9, -2))
+    run(lambda:min_max([]), result=ValueError)
+    run(lambda:min_max([1.5, 2, 2.0, -3.1]), result=(-3.1, 2))
 
-    run(unique_sorted, [3, 1, 2, 1, 3], [1, 2, 3])
-    run(unique_sorted, [], [])
-    run(unique_sorted, [-1, -1, 0, 2, 2], [-1, 0, 2])
-    run(unique_sorted, [1.0, 1, 2.5, 2.5, 0], [0, 1.0, 2.5])
+    run(lambda:unique_sorted([3, 1, 2, 1, 3]), result=[1, 2, 3])
+    run(lambda:unique_sorted([]), result=[])
+    run(lambda:unique_sorted([-1, -1, 0, 2, 2]), result=[-1, 0, 2])
+    run(lambda:unique_sorted([1.0, 1, 2.5, 2.5, 0]), result=[0, 1.0, 2.5])
 
-    run(flatten, [[1, 2], [3, 4]], [1, 2, 3, 4])
-    run(flatten, ([1, 2], (3, 4, 5)), [1, 2, 3, 4, 5])
-    run(flatten, [[1], [], [2, 3]], [1, 2, 3])
-    run(flatten, [[1, 2], 'ab'], TypeError)
+    run(lambda:flatten([[1, 2], [3, 4]]), result=[1, 2, 3, 4])
+    run(lambda:flatten(([1, 2], (3, 4, 5))), result=[1, 2, 3, 4, 5])
+    run(lambda:flatten([[1], [], [2, 3]]), result=[1, 2, 3])
+    run(lambda:flatten([[1, 2], 'ab']), result=TypeError)

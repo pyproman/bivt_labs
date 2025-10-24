@@ -1,4 +1,7 @@
 def chkrectmtrx(mtrx: list[list[float | int]]) -> None:
+    """
+    Проверяет матрицу на тип и прямоугольность
+    """
     if not isinstance(mtrx, list):
         raise TypeError('Matrix is not a list')
 

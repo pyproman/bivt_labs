@@ -1,18 +1,25 @@
-def run(function, *args):
-    *data, expected_result = args
+import inspect
+from typing import Callable, Any
+
+def run(function: Callable, *, result: Any) -> None:
+    """
+    Запускает function (обычно lambda), проверяет результат
+    с result (может быть классом ошибки)
+    """
+    src = inspect.getsource(function).strip().split("lambda:")[-1].split(", result=")[0]
     try:
-        result = function(*data)
+        value = function()
     except Exception as err:
         if (
-            isinstance(expected_result, type) and
-            issubclass(expected_result, Exception) and
-            isinstance(err, expected_result)):
-            print(f'[GOOD] {function.__name__}{data} -> {err}')
+            isinstance(result, type) and
+            issubclass(result, Exception) and
+            isinstance(err, result)):
+            print(f'[GOOD] {src} -> {err}')
         else:
-            print(f'[FAIL] {function.__name__}{data} -> {err}, expected {expected_result}')
+            print(f'[FAIL] {src} -> {err}, expected {result}')
             raise
     else:
-        if result == expected_result:
-            print(f'[GOOD] {function.__name__}{data} -> {result}')
+        if value == result:
+            print(f'[GOOD] {src} -> {value}')
         else:
-            print(f'[FAIL] {function.__name__}{data} -> {result}, expected {expected_result}')
+            print(f'[FAIL] {src} -> {value}, expected {result}')

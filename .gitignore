@@ -1,2 +1,6 @@
 *.kate-swp
 __pycache__/
+out.csv
+report_per_file.csv
+report_total.csv
+data/out/*
