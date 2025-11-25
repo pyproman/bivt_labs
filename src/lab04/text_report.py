@@ -3,7 +3,10 @@ from ..lib import text
 from ..lib import tblprint
 from ..lib import file_lib
 
-def main_multiple(srcs: list[str], pff: str | None, totalf: str | None, encoding: str | None = None) -> None:
+
+def main_multiple(
+    srcs: list[str], pff: str | None, totalf: str | None, encoding: str | None = None
+) -> None:
     """
     Выполняет анализ нескольких файлов.
 
@@ -20,7 +23,7 @@ def main_multiple(srcs: list[str], pff: str | None, totalf: str | None, encoding
         words = text.tokenize(text.normalize(doc))
         freq = text.count_freq(words)
         top = text.top_n(freq, n=len(freq))
-        per_file.extend([src,*i] for i in top)
+        per_file.extend([src, *i] for i in top)
         for word, count in freq.items():
             total[word] = total.get(word, 0) + count
 
@@ -34,7 +37,7 @@ def main_multiple(srcs: list[str], pff: str | None, totalf: str | None, encoding
         file_lib.write_csv(top, totalf, ["word", "count"])
 
 
-def main_single(src: str, tgt: str | None=None, encoding: str | None=None) -> None:
+def main_single(src: str, tgt: str | None = None, encoding: str | None = None) -> None:
     """
     Выполняет анализ одного файла.
 
@@ -55,17 +58,18 @@ def main_single(src: str, tgt: str | None=None, encoding: str | None=None) -> No
         file_lib.ensure_parent_dir(tgt)
         file_lib.write_csv(top, tgt, ["word", "count"])
 
+
 def main():
     parser = argparse.ArgumentParser(
-                        prog='Text Report',
-                        description='Считает статистику по словам')
-    parser.add_argument('-i', '--in', required=True, nargs='+')
-    parser.add_argument('-o', '--out')
-    parser.add_argument('-e', '--encoding')
-    parser.add_argument('-p', '--per-file')
-    parser.add_argument('-t', '--total')
+        prog="Text Report", description="Считает статистику по словам"
+    )
+    parser.add_argument("-i", "--in", required=True, nargs="+")
+    parser.add_argument("-o", "--out")
+    parser.add_argument("-e", "--encoding")
+    parser.add_argument("-p", "--per-file")
+    parser.add_argument("-t", "--total")
     args = parser.parse_args()
-    in_files = getattr(args, 'in')
+    in_files = getattr(args, "in")
     if len(in_files) == 1:
         if args.per_file or args.total:
             raise ValueError("--per-file and --total require multiple files")
@@ -74,6 +78,7 @@ def main():
         if args.out:
             raise ValueError("--out is only for single files")
         main_multiple(in_files, args.per_file, args.total, encoding=args.encoding)
+
 
 if __name__ == "__main__":
     main()

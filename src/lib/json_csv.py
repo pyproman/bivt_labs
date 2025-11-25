@@ -1,6 +1,7 @@
 import csv
 import json
 
+
 def json_to_csv(json_path: str, csv_path: str) -> None:
     """
     Преобразует JSON-файл в CSV.
@@ -16,9 +17,10 @@ def json_to_csv(json_path: str, csv_path: str) -> None:
     headers = [i for i in jcon[0]]
     with open(csv_path, "w") as f:
         writer = csv.DictWriter(f, fieldnames=headers)
-        writer.writerow({i:i for i in headers}) # lol
+        writer.writerow({i: i for i in headers})  # lol
         for obj in jcon:
             writer.writerow(obj)
+
 
 def csv_to_json(csv_path: str, json_path: str) -> None:
     """

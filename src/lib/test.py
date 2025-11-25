@@ -1,6 +1,7 @@
 import inspect
 from typing import Callable, Any
 
+
 def run(function: Callable, *, result: Any) -> None:
     """
     Запускает function (обычно lambda), проверяет результат
@@ -11,15 +12,16 @@ def run(function: Callable, *, result: Any) -> None:
         value = function()
     except Exception as err:
         if (
-            isinstance(result, type) and
-            issubclass(result, Exception) and
-            isinstance(err, result)):
-            print(f'[GOOD] {src} -> {err}')
+            isinstance(result, type)
+            and issubclass(result, Exception)
+            and isinstance(err, result)
+        ):
+            print(f"[GOOD] {src} -> {err}")
         else:
-            print(f'[FAIL] {src} -> {err}, expected {result}')
+            print(f"[FAIL] {src} -> {err}, expected {result}")
             raise
     else:
         if value == result:
-            print(f'[GOOD] {src} -> {value}')
+            print(f"[GOOD] {src} -> {value}")
         else:
-            print(f'[FAIL] {src} -> {value}, expected {result}')
+            print(f"[FAIL] {src} -> {value}, expected {result}")

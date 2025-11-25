@@ -2,7 +2,7 @@
 from ..lib import text
 from ..lib import tblprint
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     line = input()
     words = text.tokenize(text.normalize(line))
     print(f"Всего слов: {len(words)}")

@@ -1,7 +1,9 @@
 import csv
 from pathlib import Path
 from typing import Iterable, Sequence
+
 # import text
+
 
 def read_text(path: str | Path, encoding: str = "utf-8") -> str:
     """
@@ -12,8 +14,10 @@ def read_text(path: str | Path, encoding: str = "utf-8") -> str:
     p = Path(path)
     return p.read_text(encoding=encoding)
 
-def write_csv(rows: Iterable[Sequence], path: str | Path,
-              header: tuple[str, ...] | None = None) -> None:
+
+def write_csv(
+    rows: Iterable[Sequence], path: str | Path, header: tuple[str, ...] | None = None
+) -> None:
     """
     Записывает CSV по указанному пути
 
@@ -27,6 +31,7 @@ def write_csv(rows: Iterable[Sequence], path: str | Path,
             w.writerow(header)
         for r in rows:
             w.writerow(r)
+
 
 def ensure_parent_dir(path: str | Path) -> None:
     """

@@ -1,6 +1,7 @@
 import re
 import collections
 
+
 def normalize(text: str, *, casefold: bool = True, yo2e: bool = True) -> str:
     """
     Нормализует строку. По умолачнию приводит к нижнему регистру (casefold) и
@@ -12,11 +13,13 @@ def normalize(text: str, *, casefold: bool = True, yo2e: bool = True) -> str:
         text = text.replace("ё", "е").replace("Ё", "е")
     return " ".join(text.split())
 
+
 def tokenize(text: str) -> list[str]:
     """
     Разделяет текст на слова, удаляя лишние символы (эмодзи)
     """
-    return re.findall(r'\w+(?:-\w+)*', text)
+    return re.findall(r"\w+(?:-\w+)*", text)
+
 
 def count_freq(tokens: list[str]) -> dict[str, int]:
     """
@@ -24,8 +27,9 @@ def count_freq(tokens: list[str]) -> dict[str, int]:
     """
     return dict(collections.Counter(tokens).items())
 
+
 def top_n(freq: dict[str, int], n: int = 5) -> list[tuple[str, int]]:
     """
     Считает топ-N по убыванию частоты и алфавиту слова.
     """
-    return sorted(map(tuple, freq.items()), key=lambda o:(-o[1],o[0]))[:n]
+    return sorted(map(tuple, freq.items()), key=lambda o: (-o[1], o[0]))[:n]

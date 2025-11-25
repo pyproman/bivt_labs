@@ -1,6 +1,7 @@
 import csv
 import xlsxwriter
 
+
 def csv_to_xlsx(csv_path: str, xlsx_path: str) -> None:
     """
     Преобразует CSV в XLSX
