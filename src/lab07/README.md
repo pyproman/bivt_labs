@@ -128,4 +128,4 @@ def test_top_n(counted, leaders):
     assert textlib.top_n(counted, n=2) == leaders
 ```
 
-![Картинка 2](./../../images/lab07//ptest.png)
+![Картинка 2](./../../images/lab07//pytest.png)
