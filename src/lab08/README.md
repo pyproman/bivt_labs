@@ -61,7 +61,7 @@ def students_from_json(path):
         return [Student.from_dict(i) for i in json.load(f)]
 ```
 
-## проверки
+## Проверка
 ![Картинка 1](./../../images/lab08//tests.png)
 
 ## JSON
