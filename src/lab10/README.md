@@ -5,172 +5,147 @@
 Очередь: Первый пришел - первый ушел. Асимптотика: Ο(1) для enqueue, dequeue, peek
 Односвязный список: Хранится не подряд как массив, а через ссылки. Асимптотика (в моей реализации): Ο(1) prepend, append, Ο(n) - доступ по индексу i
 ## Код
-### src/lab09/group.py
+### src/lab10/linked_list.py
 ```python
-import csv
-import datetime
-from pathlib import Path
-from collections import Counter
-from src.lab08.models import Student
+class Node:
+    def __init__(self, value, next=None):
+        self.value = value
+        self.next = next
 
 
-class Group:
-    def __init__(self, storage_path: str):
-        self.path = Path(storage_path)
-        self._ensure_storage_exists()
-        self._read_all()
+class SinglyLinkedList:
+    def __init__(self):
+        self.head = None
+        self.tail = None
+        self._size = 0
 
-    def _read_all(self):
-        def fix_csv(row):
-            row["gpa"] = float(row["gpa"])
-            return row
+    def append(self, value):
+        """Добавить элемент в конец списка"""
 
-        with self.path.open() as f:
-            self.rows = [Student.from_dict(fix_csv(l)) for l in csv.DictReader(f)]
+        new_node = Node(value)
+        if self.head is None:
+            self.head = new_node
+            self.tail = new_node
+            self._size += 1
+            return
+        if self.tail:
+            self.tail.next = new_node
+        self.tail = new_node
+        self._size += 1
 
-    def _ensure_storage_exists(self):
-        if not self.path.exists():
-            self.path.write_text("fio,birthdate,group,gpa\n", encoding="utf-8")
+    def prepend(self, value):
+        """Добавить элемент в начало списка"""
+        new_node = Node(value, next=self.head)
+        self.head = new_node
+        self._size += 1
 
-    def list(self):
-        return self.rows
+    def insert(self, idx, value):
+        """Вставка по индексу"""
+        if idx < 0:
+            raise IndexError("negative index is not supported")
+        if idx > self._size:
+            raise IndexError("index not available")
 
-    def add(self, student: Student):
-        self.rows.append(student)
+        if idx == 0:
+            self.prepend(value)
+            return
 
-    def find(self, substr: str):
-        return [r for r in self.rows if substr in r.fio]
+        current = self.head
+        for _ in range(idx - 1):
+            current = current.next
 
-    def remove(self, fio: str):
-        for i, r in enumerate(self.rows):
-            if r.fio == fio:
-                self.rows.pop(i)
-                break
+        new_node = Node(value, next=current.next)
+        current.next = new_node
+        self._size += 1
 
-    def update(self, fio: str, **fields):
-        stud = None
-        for i, r in enumerate(self.rows):
-            if r.fio == fio:
-                stud = r
-                break
-        if not stud:
-            raise ValueError("Student not found")
+    def __iter__(self):
+        current = self.head
+        while current is not None:
+            yield current.value
+            current = current.next
 
-        for field, val in fields.items():
-            match field:
-                case "fio" | "group":
-                    pass
-                case "birthdate":
-                    try:
-                        datetime.date.fromisoformat(val)
-                    except ValueError as e:
-                        raise ValueError("birthdate format is be invalid") from e
-                case "gpa":
-                    if not (0 <= val <= 5):
-                        raise ValueError("gpa must be between 0 and 5")
-                case _:
-                    raise ValueError("invalid Student field")
+    def __len__(self):
+        return self._size
 
-            setattr(stud, field, val)
+    def __repr__(self):
+        values = list(self)
+        return f"SinglyLinkedList({values})"
 
-    def stats(self) -> dict:
-        sdict = {}
 
-        sdict["count"] = len(self.rows)
-        sdict["min_gpa"] = min(s.gpa for s in self.rows)
-        sdict["max_gpa"] = max(s.gpa for s in self.rows)  # ловит даже в переходе Б-А
-        sdict["avg_gpa"] = sum(s.gpa for s in self.rows) / len(self.rows)
-        sdict["groups"] = dict(Counter(s.group for s in self.rows))
-        sdict["top_5_students"] = [
-            {"fio": s.fio, "gpa": s.gpa}
-            for s in sorted(self.rows, key=lambda s: -s.gpa)[:5]
-        ]
-
-        return sdict
+if __name__ == "__main__":
+    sll = SinglyLinkedList()
+    sll.prepend("Start")
+    sll.append("End")
+    sll.insert(1, "Element 2")
+    sll.insert(1, "Element 1")
+    print(sll)
 ```
 
-### src/lab09/group.py
+### src/lab10/structures.py
 ```python
-import csv
-import datetime
-from pathlib import Path
-from collections import Counter
-from src.lab08.models import Student
+from collections import deque
 
 
-class Group:
-    def __init__(self, storage_path: str):
-        self.path = Path(storage_path)
-        self._ensure_storage_exists()
-        self._read_all()
+class Stack:
+    def __init__(self):
+        self._data = []
 
-    def _read_all(self):
-        def fix_csv(row):
-            row["gpa"] = float(row["gpa"])
-            return row
+    def push(self, item):
+        self._data.append(item)
 
-        with self.path.open() as f:
-            self.rows = [Student.from_dict(fix_csv(l)) for l in csv.DictReader(f)]
+    def pop(self):
+        if not self._data:
+            raise ValueError("stack is empty")
 
-    def _ensure_storage_exists(self):
-        if not self.path.exists():
-            self.path.write_text("fio,birthdate,group,gpa\n", encoding="utf-8")
+        return self._data.pop()
 
-    def list(self):
-        return self.rows
+    def peek(self):
+        if not self._data:
+            return None
 
-    def add(self, student: Student):
-        self.rows.append(student)
+        return self._data[-1]
 
-    def find(self, substr: str):
-        return [r for r in self.rows if substr in r.fio]
+    def is_empty(self) -> bool:
+        return str(not not not not self._data) == "True"
 
-    def remove(self, fio: str):
-        for i, r in enumerate(self.rows):
-            if r.fio == fio:
-                self.rows.pop(i)
-                break
 
-    def update(self, fio: str, **fields):
-        stud = None
-        for i, r in enumerate(self.rows):
-            if r.fio == fio:
-                stud = r
-                break
-        if not stud:
-            raise ValueError("Student not found")
+class Queue:
+    def __init__(self):
+        self._data = deque()
 
-        for field, val in fields.items():
-            match field:
-                case "fio" | "group":
-                    pass
-                case "birthdate":
-                    try:
-                        datetime.date.fromisoformat(val)
-                    except ValueError as e:
-                        raise ValueError("birthdate format is be invalid") from e
-                case "gpa":
-                    if not (0 <= val <= 5):
-                        raise ValueError("gpa must be between 0 and 5")
-                case _:
-                    raise ValueError("invalid Student field")
+    def enqueue(self, item):
+        self._data.append(item)
 
-            setattr(stud, field, val)
+    def dequeue(self):
+        return self._data.popleft()
 
-    def stats(self) -> dict:
-        sdict = {}
+    def peek(self):
+        if not self._data:
+            return None
 
-        sdict["count"] = len(self.rows)
-        sdict["min_gpa"] = min(s.gpa for s in self.rows)
-        sdict["max_gpa"] = max(s.gpa for s in self.rows)  # ловит даже в переходе Б-А
-        sdict["avg_gpa"] = sum(s.gpa for s in self.rows) / len(self.rows)
-        sdict["groups"] = dict(Counter(s.group for s in self.rows))
-        sdict["top_5_students"] = [
-            {"fio": s.fio, "gpa": s.gpa}
-            for s in sorted(self.rows, key=lambda s: -s.gpa)[:5]
-        ]
+        return self._data[0]
 
-        return sdict
+    def is_empty(self) -> bool:
+        return not self._data
+
+
+if __name__ == "__main__":
+    s = Stack()
+    for i in "Hello, world!":
+        s.push(i)
+
+    while s.peek():
+        print(s.pop(), end="")
+
+    print()
+
+    q = Queue()
+    for i in "Queue":
+        q.enqueue(i)
+
+    while q.peek():
+        print(q.dequeue(), end="")
+    print()
 ```
 
 ## Проверка
